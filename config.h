@@ -1,5 +1,4 @@
-#ifndef LOOTOPIA_CONFIG_H
-#define LOOTOPIA_CONFIG_H
+#pragma once
 
 #include "./arguments.h"
 #include <stddef.h>
@@ -14,6 +13,3 @@ typedef struct {
 void *load_config(config_entry_t *entries, size_t entry_count);
 
 void free_config(IN config_entry_t *entries, IN size_t entry_count, IN void *config);
-
-#endif 
-
