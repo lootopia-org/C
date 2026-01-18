@@ -3,10 +3,15 @@
 #include "./arguments.h"
 #include<stdlib.h>
 
+typedef enum{
+  INT_T,
+  STR_T
+} TokenType;
+
 typedef struct {
     const char *key;          
     size_t offset;               
-    enum { INT_T, STR_T } type;
+    TokenType type;
 } ConfigEntry;
 
 
