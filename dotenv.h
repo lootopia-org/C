@@ -4,7 +4,7 @@
 #include "./arguments.h"
 #include <stddef.h>
 
-#define DOTENV_FILE ".env"
+#define DOTENV_FILE "../.env"
 #define READ_PERMISSIONS "r"
 
 #define LINE_SIZE 1024
