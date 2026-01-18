@@ -1,15 +1,15 @@
 #pragma once
 
 #include "./arguments.h"
-#include <stddef.h>
+#include<stdlib.h>
 
 typedef struct {
     const char *key;          
-    void *dest;               
+    size_t offset;               
     enum { INT_T, STR_T } type;
-} config_entry_t;
+} ConfigEntry;
 
 
-void *load_config(config_entry_t *entries, size_t entry_count);
+void *load_config(void *config, const ConfigEntry *entries, size_t entry_count);
 
-void free_config(IN config_entry_t *entries, IN size_t entry_count, IN void *config);
+void free_config(void *config, const ConfigEntry *entries, size_t entry_count);
