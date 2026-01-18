@@ -1,5 +1,5 @@
 #include "./dotenv.h"
-#include "../inc/C/errors.h"
+#include "./errors.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

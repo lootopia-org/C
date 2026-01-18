@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 
+#define POSTGRES_CONNECTION_ERROR "An error occured while trying to connect to the database %s"
+
 #define PRINT_ERROR_DO_ACTION(msg, action) do { \
   fprintf(stderr, "%s\n", msg);                 \
   action;                                       \
