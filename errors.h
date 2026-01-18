@@ -3,9 +3,13 @@
 
 #include <stdlib.h>
 
-#define ERROR_EXIT(msg) do { \
-  fprintf(stderr, "%s\n", msg); \
-  exit(EXIT_FAILURE); \
-  } while(0)
+#define PRINT_ERROR_DO_ACTION(msg, action) do { \
+  fprintf(stderr, "%s\n", msg);                 \
+  action;                                       \
+} while(0)
+
+#define ERROR_EXIT(msg) do {                      \
+  PRINT_ERROR_DO_ACTION(msg, exit(EXIT_FAILURE)); \
+} while(0)
 
 #endif
