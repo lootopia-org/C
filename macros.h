@@ -1,8 +1,6 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#include <cstdlib>
-#include <cstring>
 #include <string.h>
 #define GET_ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
