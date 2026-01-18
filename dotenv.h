@@ -1,5 +1,4 @@
-#ifndef DOTENV_H
-#define DOTENV_H
+#pragma once
 
 #include "./arguments.h"
 #include <stddef.h>
@@ -26,5 +25,3 @@ typedef struct DOTENV_ARRAY {
 dotenv_array_t *read_dot_env(EMPTY);
 
 void destroy_dotenv_array(IN dotenv_array_t *array);
-
-#endif
