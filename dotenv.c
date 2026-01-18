@@ -1,5 +1,6 @@
 #include "./dotenv.h"
 #include "./errors.h"
+#include "macros.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -12,11 +13,15 @@ dotenv_array_t *read_dot_env(EMPTY) {
   dotenv_t *items = malloc(cap * sizeof(dotenv_t));
   dotenv_array_t *result = malloc(sizeof(dotenv_array_t));
   FILE *file = fopen(DOTENV_FILE, READ_PERMISSIONS);
+  if(!file){
+    char *path = concat_and_ret_str(PARENT_DIR, DOTENV_FILE); 
+    file = fopen(path, READ_PERMISSIONS);
+    if(!file)
+      ERROR_EXIT("Error reading dotenv file, make sure it exists");
+  }
   
   if (!items) 
-    ERROR_EXIT("Memory allocation failed for items");
-  if (!file) 
-    ERROR_EXIT("Error reading dotenv file, make sure it exists");
+    ERROR_EXIT(ALLOCATION_ERROR, "items");
   if (!result) 
     ERROR_EXIT("Memory allocation failed for result struct");
 
