@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,13 +7,15 @@
 #include "./dotenv.h"
 #include "./errors.h"
 
-void *load_config(void *config, const ConfigEntry *entries, size_t entry_count) {
+void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_size) {
     int found;
     size_t i, j;
     dotenv_array_t *env = read_dot_env();
-    config = malloc(sizeof(config));
+    void *config = malloc(sizeof(struct_size));
     if (!config) 
         ERROR_EXIT(ALLOCATION_ERROR, "config");
+
+    memset(config, 0, struct_size); 
     
     for (i = 0; i < entry_count; i++) {
         found = 0;

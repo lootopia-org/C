@@ -15,6 +15,6 @@ typedef struct {
 } ConfigEntry;
 
 
-void *load_config(void *config, const ConfigEntry *entries, size_t entry_count);
+void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_size);
 
 void free_config(void *config, const ConfigEntry *entries, size_t entry_count);
