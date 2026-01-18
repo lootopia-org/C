@@ -11,7 +11,7 @@ void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_
     int found;
     size_t i, j;
     dotenv_array_t *env = read_dot_env();
-    void *config = malloc(sizeof(struct_size));
+    void *config = malloc(struct_size);
     if (!config) 
         ERROR_EXIT(ALLOCATION_ERROR, "config");
 
