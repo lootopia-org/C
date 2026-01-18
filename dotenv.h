@@ -1,7 +1,7 @@
 #ifndef DOTENV_H
 #define DOTENV_H
 
-#include "../inc/C/arguments.h"
+#include "./arguments.h"
 #include <stddef.h>
 
 #define DOTENV_FILE ".env"

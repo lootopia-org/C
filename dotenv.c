@@ -1,4 +1,4 @@
-#include "../inc/dotenv.h"
+#include "./dotenv.h"
 #include "../inc/C/errors.h"
 #include <stdlib.h>
 #include <stdio.h>
