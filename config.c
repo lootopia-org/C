@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "./config.h"
@@ -9,7 +10,7 @@ void *load_config(void *config, const ConfigEntry *entries, size_t entry_count) 
     int found;
     size_t i, j;
     dotenv_array_t *env = read_dot_env();
-    
+    config = malloc(sizeof(config));
     if (!config) 
         ERROR_EXIT(ALLOCATION_ERROR, "config");
     
