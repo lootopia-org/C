@@ -45,7 +45,7 @@ typedef struct {
 void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_size);
 void free_config(void *config, const ConfigEntry *entries, size_t entry_count);
 
-#ifdef CONFIG_IMPLEMENTATION
+#ifdef CONFIG_INIT_LIB
   static dotenv_array_t *read_dot_env(EMPTY) {
     char *equals_sign, *name, *value;
     char line[LINE_SIZE];
