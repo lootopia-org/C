@@ -9,6 +9,7 @@
 #include "./arguments.h"
 #include "./config.h"
 #include "./errors.h"
+#include "./macros.h"
 
 #define DOTENV_FILE ".env"
 #define PARENT_DIR  "../"

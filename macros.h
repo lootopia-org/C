@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+
 #define GET_ARRAY_LENGTH(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 static inline char* concat_and_ret_str(const char *s1, const char *s2) {
