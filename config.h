@@ -8,7 +8,6 @@
 
 #include "./arguments.h"
 #include "./config.h"
-#include "./dotenv.h"
 #include "./errors.h"
 
 
@@ -29,6 +28,8 @@ void free_config(void *config, const ConfigEntry *entries, size_t entry_count);
 
 #ifdef CONFIG_IMPLEMENTATION
   #define DOTENV_IMPLEMENTATION
+  #include "./dotenv.h"
+
   void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_size) {
       int found;
       size_t i, j;
