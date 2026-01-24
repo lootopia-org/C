@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define DOTENV_IMPLEMENTATION
+#include "./dotenv.h"
 #include "./arguments.h"
 #include "./config.h"
 #include "./errors.h"
@@ -27,8 +29,6 @@ void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_
 void free_config(void *config, const ConfigEntry *entries, size_t entry_count);
 
 #ifdef CONFIG_IMPLEMENTATION
-  #define DOTENV_IMPLEMENTATION
-  #include "./dotenv.h"
 
   void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_size) {
       int found;
