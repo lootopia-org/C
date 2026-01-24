@@ -33,7 +33,7 @@ typedef struct DOTENV_ARRAY {
 dotenv_array_t *read_dot_env(EMPTY);
 void destroy_dotenv_array(IN dotenv_array_t *array);
 
-#ifdef DOTENV
+#ifdef DOTENV_IMPLEMENTATION
   dotenv_array_t *read_dot_env(EMPTY) {
     char *equals_sign, *name, *value;
     char line[LINE_SIZE];

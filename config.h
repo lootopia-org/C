@@ -27,8 +27,8 @@ typedef struct {
 void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_size);
 void free_config(void *config, const ConfigEntry *entries, size_t entry_count);
 
-#ifdef CONFIG
-  #define DOTENV
+#ifdef CONFIG_IMPLEMENTATION
+  #define DOTENV_IMPLEMENTATION
   void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_size) {
       int found;
       size_t i, j;
