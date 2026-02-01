@@ -41,12 +41,13 @@ typedef struct {
     TokenType type;
 } ConfigEntry;
 
-
+dotenv_array_t * read_dot_env(EMPTY);
+void destroy_dotenv_array(IN dotenv_array_t *array);
 void *load_config(const ConfigEntry *entries, size_t entry_count, size_t struct_size);
 void free_config(void *config, const ConfigEntry *entries, size_t entry_count);
 
-#ifdef CONFIG_INIT_LIB
-  static dotenv_array_t *read_dot_env(EMPTY) {
+#ifdef CONFIG_IMPLEMTATION
+  dotenv_array_t *read_dot_env(EMPTY) {
     char *equals_sign, *name, *value;
     char line[LINE_SIZE];
     size_t count = INIT_COUNT;
@@ -101,7 +102,7 @@ void free_config(void *config, const ConfigEntry *entries, size_t entry_count);
     return result;
   }
 
-  static void destroy_dotenv_array(IN dotenv_array_t *array) {
+  void destroy_dotenv_array(IN dotenv_array_t *array) {
       if (!array) return;
       for (size_t i = 0; i < array->count; i++) {
           free(array->items[i].name);

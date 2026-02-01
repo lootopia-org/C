@@ -1,1 +1,0 @@
--- Write the oppsite of what you wrote in the up.sql file
