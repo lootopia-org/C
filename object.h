@@ -1,5 +1,6 @@
 #pragma once
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -122,3 +123,59 @@ typedef struct {
       }                                                                        \
     }                                                                          \
   } while (0)
+
+static inline size_t serialize_object(char *buf, size_t size,
+                                      const obj_t *items, size_t count);
+
+static inline size_t serialize_val(char *buf, size_t size,
+                                   const obj_val_t *val) {
+  size_t offset = 0;
+  switch (val->type) {
+  case OBJ_STRING:
+    offset += (size_t)snprintf(buf + offset, size - offset, "\"%.*s\"",
+                               (int)val->string.len, val->string.ptr);
+    break;
+  case OBJ_INT:
+    offset += (size_t)snprintf(buf + offset, size - offset, "%d", val->integer);
+    break;
+  case OBJ_FLOAT:
+    offset +=
+        (size_t)snprintf(buf + offset, size - offset, "%g", val->floating);
+    break;
+  case OBJ_BOOL:
+    offset += (size_t)snprintf(buf + offset, size - offset, "%s",
+                               val->boolean ? "true" : "false");
+    break;
+  case OBJ_ARRAY:
+    offset += (size_t)snprintf(buf + offset, size - offset, "[");
+    for (size_t i = 0; i < val->array.count; i++) {
+      if (i > 0)
+        offset += (size_t)snprintf(buf + offset, size - offset, ",");
+      offset +=
+          serialize_val(buf + offset, size - offset, &val->array.items[i]);
+    }
+    offset += (size_t)snprintf(buf + offset, size - offset, "]");
+    break;
+  case OBJ_OBJECT:
+    offset += serialize_object(buf + offset, size - offset, val->object.items,
+                               val->object.count);
+    break;
+  }
+  return offset;
+}
+
+static inline size_t serialize_object(char *buf, size_t size,
+                                      const obj_t *items, size_t count) {
+  size_t offset = 0;
+  offset += (size_t)snprintf(buf + offset, size - offset, "{");
+  for (size_t i = 0; i < count; i++) {
+    if (i > 0)
+      offset += (size_t)snprintf(buf + offset, size - offset, ",");
+    offset +=
+        (size_t)snprintf(buf + offset, size - offset,
+                         "\"%.*s\":", (int)items[i].key_len, items[i].key);
+    offset += serialize_val(buf + offset, size - offset, &items[i].value);
+  }
+  offset += (size_t)snprintf(buf + offset, size - offset, "}");
+  return offset;
+}
