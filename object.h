@@ -9,6 +9,7 @@ typedef struct obj_t obj_t;
 
 typedef enum {
   OBJ_STRING,
+  OBJ_FMT,
   OBJ_INT,
   OBJ_FLOAT,
   OBJ_BOOL,
@@ -20,9 +21,13 @@ struct obj_val_t {
   obj_type_t type;
   union {
     struct {
-      char ptr[256];
+      char *ptr;
       size_t len;
     } string;
+    struct {
+      char buf[256];
+      size_t len;
+    } fmt_str;
     int integer;
     float floating;
     int boolean;
@@ -55,12 +60,7 @@ typedef struct {
 } obj_root_t;
 
 #define obj_string(s)                                                          \
-  ({                                                                           \
-    obj_val_t _v = {.type = OBJ_STRING};                                       \
-    _v.string.len =                                                            \
-        (size_t)snprintf(_v.string.ptr, sizeof(_v.string.ptr), "%s", s);       \
-    _v;                                                                        \
-  })
+  (obj_val_t) { .type = OBJ_STRING, .string = {.ptr = s, .len = sizeof(s) - 1} }
 
 #define obj_int(n)                                                             \
   (obj_val_t) { .type = OBJ_INT, .integer = (n) }
@@ -73,9 +73,9 @@ typedef struct {
 
 #define obj_fmt(f, ...)                                                        \
   ({                                                                           \
-    obj_val_t _v = {.type = OBJ_STRING};                                       \
-    _v.string.len = (size_t)snprintf(_v.string.ptr, sizeof(_v.string.ptr), f,  \
-                                     __VA_ARGS__);                             \
+    obj_val_t _v = {.type = OBJ_FMT};                                          \
+    _v.fmt_str.len = (size_t)snprintf(_v.fmt_str.buf, sizeof(_v.fmt_str.buf),  \
+                                      f, __VA_ARGS__);                         \
     _v;                                                                        \
   })
 
@@ -145,6 +145,10 @@ static inline size_t serialize_val(char *buf, size_t size,
   case OBJ_STRING:
     offset += (size_t)snprintf(buf + offset, size - offset, "\"%.*s\"",
                                (int)val->string.len, val->string.ptr);
+    break;
+  case OBJ_FMT:
+    offset += (size_t)snprintf(buf + offset, size - offset, "\"%.*s\"",
+                               (int)val->fmt_str.len, val->fmt_str.buf);
     break;
   case OBJ_INT:
     offset += (size_t)snprintf(buf + offset, size - offset, "%d", val->integer);
