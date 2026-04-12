@@ -1,5 +1,4 @@
 #pragma once
-
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,20 +10,24 @@ typedef struct {
   size_t value_len;
 } obj_t;
 
+typedef struct {
+  obj_t *items;
+  size_t count;
+  size_t capacity;
+} obj_list_t;
+
 #define OBJ_PAIR(k, v)                                                         \
   {.key = (k),                                                                 \
    .value = (v),                                                               \
    .key_len = sizeof(k) - 1,                                                   \
    .value_len = sizeof(v) - 1}
 
-#define INIT_OBJS_1(k1, v1) OBJ_PAIR(k1, v1)
+#define OBJ_LIST(...)                                                          \
+  {.items = (obj_t[]){__VA_ARGS__},                                            \
+   .count = sizeof((obj_t[]){__VA_ARGS__}) / sizeof(obj_t),                    \
+   .capacity = sizeof((obj_t[]){__VA_ARGS__}) / sizeof(obj_t)}
 
-#define INIT_OBJS_2(k1, v1, k2, v2) OBJ_PAIR(k1, v1), OBJ_PAIR(k2, v2)
-
-#define INIT_OBJS_3(k1, v1, k2, v2, k3, v3)                                    \
-  OBJ_PAIR(k1, v1), OBJ_PAIR(k2, v2), OBJ_PAIR(k3, v3)
-
-#define OBJ_GET(arr, key) obj_get((arr), sizeof(arr) / sizeof((arr)[0]), (key))
+#define OBJ_GET(list, k) obj_get((list)->items, (list)->count, (k))
 
 #define OBJ_PUT(list, k, v)                                                    \
   do {                                                                         \
@@ -32,7 +35,7 @@ typedef struct {
     for (size_t i = 0; i < (list)->count; i++) {                               \
       if (strcmp((list)->items[i].key, (k)) == 0) {                            \
         (list)->items[i].value = (v);                                          \
-        (list)->items[i].value_len = sizeof(v) - 1;                            \
+        (list)->items[i].value_len = strlen(v);                                \
         found = 1;                                                             \
         break;                                                                 \
       }                                                                        \
@@ -45,8 +48,8 @@ typedef struct {
       }                                                                        \
       (list)->items[(list)->count++] = (obj_t){.key = (k),                     \
                                                .value = (v),                   \
-                                               .key_len = sizeof(k) - 1,       \
-                                               .value_len = sizeof(v) - 1};    \
+                                               .key_len = strlen(k),           \
+                                               .value_len = strlen(v)};        \
     }                                                                          \
   } while (0)
 
@@ -60,8 +63,3 @@ typedef struct {
       }                                                                        \
     }                                                                          \
   } while (0)
-
-#define GET_MACRO(_1, _2, _3, _4, _5, _6, NAME, ...) NAME
-
-#define INIT_OBJS(...)                                                         \
-  GET_MACRO(__VA_ARGS__, INIT_OBJS_3, INIT_OBJS_2, INIT_OBJS_1)(__VA_ARGS__)
