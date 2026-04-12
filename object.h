@@ -16,20 +16,20 @@ typedef struct {
   size_t capacity;
 } obj_list_t;
 
-#define OBJ_PAIR(k, v)                                                         \
+#define obj_pair(k, v)                                                         \
   {.key = (k),                                                                 \
    .value = (v),                                                               \
    .key_len = sizeof(k) - 1,                                                   \
    .value_len = sizeof(v) - 1}
 
-#define OBJ_LIST(...)                                                          \
+#define obj_list(...)                                                          \
   {.items = (obj_t[]){__VA_ARGS__},                                            \
    .count = sizeof((obj_t[]){__VA_ARGS__}) / sizeof(obj_t),                    \
    .capacity = sizeof((obj_t[]){__VA_ARGS__}) / sizeof(obj_t)}
 
-#define OBJ_GET(list, k) obj_get((list)->items, (list)->count, (k))
+#define obj_get(list, k) obj_get((list)->items, (list)->count, (k))
 
-#define OBJ_PUT(list, k, v)                                                    \
+#define obj_put(list, k, v)                                                    \
   do {                                                                         \
     int found = 0;                                                             \
     for (size_t i = 0; i < (list)->count; i++) {                               \
@@ -53,7 +53,7 @@ typedef struct {
     }                                                                          \
   } while (0)
 
-#define OBJ_REMOVE(list, k)                                                    \
+#define obj_remove(list, k)                                                    \
   do {                                                                         \
     for (size_t i = 0; i < (list)->count; i++) {                               \
       if (strcmp((list)->items[i].key, (k)) == 0) {                            \
