@@ -55,9 +55,12 @@ typedef struct {
 } obj_root_t;
 
 #define obj_string(s)                                                          \
-  (obj_val_t) {                                                                \
-    .type = OBJ_STRING, .string = {.ptr = (s), .len = sizeof(s) - 1}           \
-  }
+  ({                                                                           \
+    obj_val_t _v = {.type = OBJ_STRING};                                       \
+    _v.string.len =                                                            \
+        (size_t)snprintf(_v.string.ptr, sizeof(_v.string.ptr), "%s", s);       \
+    _v;                                                                        \
+  })
 
 #define obj_int(n)                                                             \
   (obj_val_t) { .type = OBJ_INT, .integer = (n) }
