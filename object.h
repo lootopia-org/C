@@ -20,7 +20,7 @@ struct obj_val_t {
   obj_type_t type;
   union {
     struct {
-      char *ptr;
+      char ptr[256];
       size_t len;
     } string;
     int integer;
@@ -67,6 +67,14 @@ typedef struct {
 
 #define obj_bool(b)                                                            \
   (obj_val_t) { .type = OBJ_BOOL, .boolean = (b) }
+
+#define obj_fmt(f, ...)                                                        \
+  ({                                                                           \
+    obj_val_t _v = {.type = OBJ_STRING};                                       \
+    _v.string.len = (size_t)snprintf(_v.string.ptr, sizeof(_v.string.ptr), f,  \
+                                     __VA_ARGS__);                             \
+    _v;                                                                        \
+  })
 
 #define obj_array(...)                                                         \
   (obj_val_t) {                                                                \
