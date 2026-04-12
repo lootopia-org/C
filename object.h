@@ -17,10 +17,10 @@ typedef struct {
 } obj_list_t;
 
 #define obj_pair(k, v)                                                         \
-  &(obj_t){.key = (k),                                                         \
-           .value = (v),                                                       \
-           .key_len = sizeof(k) - 1,                                           \
-           .value_len = sizeof(v) - 1}
+  (obj_t){.key = (k),                                                          \
+          .value = (v),                                                        \
+          .key_len = sizeof(k) - 1,                                            \
+          .value_len = sizeof(v) - 1}
 
 #define obj_list(...)                                                          \
   &(obj_list_t){.items = (obj_t[]){__VA_ARGS__},                               \
