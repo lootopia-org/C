@@ -17,15 +17,17 @@ typedef struct {
 } obj_list_t;
 
 #define obj_pair(k, v)                                                         \
-  {.key = (k),                                                                 \
-   .value = (v),                                                               \
-   .key_len = sizeof(k) - 1,                                                   \
-   .value_len = sizeof(v) - 1}
+  (obj_t){.key = (k),                                                          \
+          .value = (v),                                                        \
+          .key_len = sizeof(k) - 1,                                            \
+          .value_len = sizeof(v) - 1}
 
 #define obj_list(...)                                                          \
-  {.items = (obj_t[]){__VA_ARGS__},                                            \
-   .count = sizeof((obj_t[]){__VA_ARGS__}) / sizeof(obj_t),                    \
-   .capacity = sizeof((obj_t[]){__VA_ARGS__}) / sizeof(obj_t)}
+  (obj_list_t) {                                                               \
+    .items = (obj_t[]){__VA_ARGS__},                                           \
+    .count = sizeof((obj_t[]){__VA_ARGS__}) / sizeof(obj_t),                   \
+    .capacity = sizeof((obj_t[]){__VA_ARGS__}) / sizeof(obj_t)                 \
+  }
 
 #define obj_get(list, k) obj_get((list)->items, (list)->count, (k))
 
