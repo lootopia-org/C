@@ -17,7 +17,7 @@ typedef struct {
 
 DBPool *db_pool_create(const char *conninfo, int size);
 PGconn *db_pool_acquire(DBPool *pool);
-PGresult *db_query(const char *query)
+PGresult *db_query(DBPool *pool, const char *query)
 void db_pool_release(DBPool *pool, PGconn *conn);
 void db_pool_destroy(DBPool *pool);
 
@@ -64,12 +64,12 @@ PGconn *db_pool_acquire(DBPool *pool) {
     }
 }
 
-PGresult *db_query(const char *query) {
-    PGconn *conn = db_pool_acquire(global_pool);
+PGresult *db_query(DBPool *pool, const char *query) {
+    PGconn *conn = db_pool_acquire(pool);
 
     PGresult *res = PQexec(conn, query);
 
-    db_pool_release(global_pool, conn);
+    db_pool_release(pool, conn);
     return res;
 }
 
