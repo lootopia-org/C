@@ -16,6 +16,8 @@ typedef struct {
 } DBPool;
 
 DBPool *db_pool_create(const char *conninfo, int size);
+PGconn *db_pool_acquire(DBPool *pool);
+PGresult *db_query(const char *query)
 void db_pool_release(DBPool *pool, PGconn *conn);
 void db_pool_destroy(DBPool *pool);
 
@@ -44,6 +46,32 @@ DBPool *db_pool_create(const char *conninfo, int size) {
     return pool;
 }
 
+PGconn *db_pool_acquire(DBPool *pool) {
+    pthread_mutex_lock(&pool->lock);
+
+    while (1) {
+        for (int i = 0; i < pool->size; i++) {
+            if (!pool->in_use[i]) {
+                pool->in_use[i] = 1;
+                PGconn *conn = pool->connections[i];
+
+                pthread_mutex_unlock(&pool->lock);
+                return conn;
+            }
+        }
+
+        pthread_cond_wait(&pool->cond, &pool->lock);
+    }
+}
+
+PGresult *db_query(const char *query) {
+    PGconn *conn = db_pool_acquire(global_pool);
+
+    PGresult *res = PQexec(conn, query);
+
+    db_pool_release(global_pool, conn);
+    return res;
+}
 
 void db_pool_release(DBPool *pool, PGconn *conn) {
     pthread_mutex_lock(&pool->lock);
