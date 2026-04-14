@@ -10,10 +10,8 @@ typedef struct {
     PGconn **connections;
     int *in_use;
     int size;
-
     pthread_mutex_t lock;
     pthread_cond_t cond;
-
     char *conninfo;
 } DBPool;
 
