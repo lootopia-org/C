@@ -138,6 +138,25 @@ typedef struct {
 static inline size_t serialize_object(char *buf, size_t size,
                                       const obj_t *items, size_t count);
 
+
+static inline obj_val_t obj_array_dyn(obj_list_t *list) {
+    return (obj_val_t){
+        .type = OBJ_ARRAY,
+        .array = {
+            .items = (obj_val_t *)list->items,
+            .count = list->count
+        }
+    };
+}
+
+static inline void obj_list_append_val(obj_list_t *list, obj_val_t v) {
+    if (list->count == list->capacity) {
+        list->capacity = list->capacity ? list->capacity * 2 : 4;
+        list->items = realloc(list->items, list->capacity * sizeof(obj_val_t));
+    }
+    ((obj_val_t *)list->items)[list->count++] = v;
+}
+
 static inline size_t serialize_val(char *buf, size_t size,
                                    const obj_val_t *val) {
   size_t offset = 0;
