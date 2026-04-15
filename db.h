@@ -33,13 +33,12 @@ STATIC_LIB_DEF int db_col(DBRows *r, const char *name) {
     return PQfnumber(r->res, name);
 }
 
-STATIC_LIB_DEF char *db_get_str(DBRows *r, const char *col, size_t len) {
-    char out[256];
+STATIC_LIB_DEF const char *db_get_str(DBRows *r, const char *col) {
     int c = db_col(r, col);
-    if (c < 0 || PQgetisnull(r->res, r->row, c)) { out[0] = '\0'; return; }
-    strncpy(out, PQgetvalue(r->res, r->row, c), len - 1);
-    out[len - 1] = '\0';
-    return out;
+    if (c < 0 || PQgetisnull(r->res, r->row, c)) {
+        return "";
+    }
+    return PQgetvalue(r->res, r->row, c);
 }
 
 STATIC_LIB_DEF char *db_get_strdup(DBRows *r, const char *col) {
